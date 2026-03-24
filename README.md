@@ -1,5 +1,7 @@
 # Autonomous Decision Engine (ADE)
 
+> AI shouldn't just be powerful — it should be accountable.
+
 A **Human-in-the-Loop AI Decision System** built with LangGraph that intelligently decides whether an AI should act autonomously, use tools, request human input, or refuse to proceed.
 
 ## Why This Matters
