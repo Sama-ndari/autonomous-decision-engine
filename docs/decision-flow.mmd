@@ -1,0 +1,64 @@
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#4a90d9', 'primaryTextColor': '#fff', 'primaryBorderColor': '#2d5a8a', 'lineColor': '#5c6bc0', 'secondaryColor': '#81c784', 'tertiaryColor': '#fff59d'}}}%%
+
+flowchart TD
+    subgraph input [Input Phase]
+        Start([User Request])
+    end
+    
+    subgraph analysis [Analysis Phase]
+        TaskAnalyzer[Task Analyzer]
+        RiskEvaluator[Risk Evaluator]
+    end
+    
+    subgraph decision [Decision Routing]
+        Router{Decision Router}
+    end
+    
+    subgraph execution [Execution Phase]
+        Worker[Worker Node]
+        ToolWorker[Tool Worker]
+        ToolExecutor[Tool Executor]
+    end
+    
+    subgraph humanLoop [Human Loop]
+        HumanInput[Human Input]
+    end
+    
+    subgraph safety [Safety Controls]
+        Refusal[Refusal Node]
+    end
+    
+    subgraph quality [Quality Gate]
+        Evaluator[Quality Evaluator]
+        EvalRouter{Evaluation Router}
+    end
+    
+    subgraph output [Output]
+        Complete([Complete])
+    end
+    
+    Start --> TaskAnalyzer
+    TaskAnalyzer --> RiskEvaluator
+    RiskEvaluator --> Router
+    
+    Router -->|AUTONOMOUS| Worker
+    Router -->|TOOLS| ToolWorker
+    Router -->|HUMAN| HumanInput
+    Router -->|STOP| Refusal
+    
+    Worker --> Evaluator
+    ToolWorker --> ToolExecutor
+    ToolExecutor --> ToolWorker
+    ToolWorker --> Evaluator
+    
+    Evaluator --> EvalRouter
+    EvalRouter -->|PASS| Complete
+    EvalRouter -->|RETRY| Worker
+    EvalRouter -->|ESCALATE| HumanInput
+    
+    HumanInput -->|Approved| Worker
+    HumanInput -->|Modified| TaskAnalyzer
+    HumanInput -->|Rejected| Refusal
+    
+    Refusal --> Complete
+
